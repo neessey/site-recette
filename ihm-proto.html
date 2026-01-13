@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Recettes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #ff6b6b;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        nav {
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .search-bar button:hover {
+            background-color: #ff5252;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filters select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        main {
+            padding: 2rem 0;
+        }
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .recipe-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-image {
+            width: 100%;
+            height: 200px;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .recipe-content {
+            padding: 15px;
+        }
+
+        .recipe-title {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .recipe-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .recipe-description {
+            font-size: 0.9rem;
+            color: #777;
+            line-height: 1.4;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #ffe0e0;
+            color: #ff6b6b;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            max-width: 800px;
+            margin: 50px auto;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background-color: #ff6b6b;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .ingredients,
+        .instructions {
+            margin-bottom: 30px;
+        }
+
+        .ingredients ul,
+        .instructions ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .ingredients li,
+        .instructions li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>🍳 Mes Recettes</h1>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Rechercher une recette...">
+                <button onclick="searchRecipes()">Rechercher</button>
+            </div>
+            <div class="filters">
+                <select id="categoryFilter">
+                    <option value="">Toutes les catégories</option>
+                    <option value="entree">Entrée</option>
+                    <option value="plat">Plat principal</option>
+                    <option value="dessert">Dessert</option>
+                </select>
+                <select id="timeFilter">
+                    <option value="">Temps de préparation</option>
+                    <option value="15">Moins de 15 min</option>
+                    <option value="30">Moins de 30 min</option>
+                    <option value="60">Moins de 1h</option>
+                </select>
+                <select id="difficultyFilter">
+                    <option value="">Nombre de personnes</option>
+                    <option value="facile">2 pers</option>
+                    <option value="moyen">4 pers</option>
+                    <option value="difficile">6 pers</option>
+                    <option value="grande">12 et plus</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="recipes-grid" id="recipesGrid">
+                <div class="recipe-card" onclick="openRecipe(1)">
+                    <div class="recipe-image">
+                        <img src="pates.jpg" alt="Pâtes Carbonara"
+                            style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="recipe-content">
+                        <h3 class="recipe-title">Pâtes Carbonara</h3>
+                        <div class="recipe-meta">
+                            <span>⏱️ 20 min</span>
+                            <span>👥 4 pers.</span>
+                        </div>
+                        <p class="recipe-description">Un classique italien crémeux et savoureux.</p>
+                        <span class="tag">Plat principal</span>
+                    </div>
+                </div>
+
+                <div class="recipe-card" onclick="openRecipe(2)">
+                    <div class="recipe-image">
+                        <img src="salade.webp" alt="" style="width:100%; height:100%; object-fit:cover; display:block;"">
+                    </div>
+                    <div class=" recipe-content">
+                        <h3 class="recipe-title">Salade César</h3>
+                        <div class="recipe-meta">
+                            <span>⏱️ 15 min</span>
+                            <span>👥 2 pers.</span>
+                        </div>
+                        <p class="recipe-description">Salade fraîche avec poulet grillé et parmesan.</p>
+                        <span class="tag">Entrée</span>
+                    </div>
+                </div>
+
+                <div class="recipe-card" onclick="openRecipe(3)">
+                    <div class="recipe-image">
+                        <img src="tiramisu.webp" alt=""
+                            style="width:100%; height:100%; object-fit:cover; display:block;"">
+                    </div>
+                    <div class=" recipe-content">
+                        <h3 class="recipe-title">Tiramisu</h3>
+                        <div class="recipe-meta">
+                            <span>⏱️ 30 min</span>
+                            <span>👥 6 pers.</span>
+                        </div>
+                        <p class="recipe-description">Dessert italien onctueux au café et mascarpone.</p>
+                        <span class="tag">Dessert</span>
+                    </div>
+                </div>
+
+                <div class="recipe-card" onclick="openRecipe(4)">
+                    <div class="recipe-image">
+                        <img src="burger.webp" alt="" style="width:100%; height:100%; object-fit:cover; display:block;"">
+                    </div>
+                    <div class=" recipe-content">
+                        <h3 class="recipe-title">Burger Maison</h3>
+                        <div class="recipe-meta">
+                            <span>⏱️ 25 min</span>
+                            <span>👥 4 pers.</span>
+                        </div>
+                        <p class="recipe-description">Burger juteux avec frites croustillantes.</p>
+                        <span class="tag">Plat principal</span>
+                    </div>
+                </div>
+
+                <div class="recipe-card" onclick="openRecipe(5)">
+                    <div class="recipe-image">
+                        <img src="ratatouille.jpeg" alt=""
+                            style="width:100%; height:100%; object-fit:cover; display:block;"">
+                    </div>
+                    <div class=" recipe-content">
+                        <h3 class="recipe-title">Ratatouille</h3>
+                        <div class="recipe-meta">
+                            <span>⏱️ 45 min</span>
+                            <span>👥 4 pers.</span>
+                        </div>
+                        <p class="recipe-description">Légumes du soleil mijotés à la provençale.</p>
+                        <span class="tag">Plat principal</span>
+                    </div>
+                </div>
+
+                <div class="recipe-card" onclick="openRecipe(6)">
+                    <div class="recipe-image">
+                        <img src="cookies.webp" alt="" style="width:100%; height:100%; object-fit:cover; display:block;"">
+                    </div>
+                    <div class=" recipe-content">
+                        <h3 class="recipe-title">Cookies Chocolat</h3>
+                        <div class="recipe-meta">
+                            <span>⏱️ 25 min</span>
+                            <span>👥 12 pièces</span>
+                        </div>
+                        <p class="recipe-description">Cookies moelleux aux pépites de chocolat.</p>
+                        <span class="tag">Dessert</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="recipeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Nom de la recette</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="recipe-meta">
+                    <span>⏱️ <span id="modalTime"></span></span>
+                    <span>👥 <span id="modalServings"></span></span>
+                    <span>📊 <span id="modalDifficulty"></span></span>
+                </div>
+                <div class="ingredients">
+                    <h3>Ingrédients</h3>
+                    <ul id="modalIngredients"></ul>
+                </div>
+                <div class="instructions">
+                    <h3>Instructions</h3>
+                    <ol id="modalInstructions"></ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Mes Recettes - Tous droits réservés</p>
+        </div>
+    </footer>
+
+    <script>
+        const recipes = {
+            1: {
+                title: "Pâtes Carbonara",
+                time: "20 min",
+                servings: "4 personnes",
+                difficulty: "Facile",
+                ingredients: [
+                    "400g de spaghetti",
+                    "200g de lardons",
+                    "4 œufs",
+                    "100g de parmesan râpé",
+                    "Sel et poivre"
+                ],
+                instructions: [
+                    "Faire cuire les pâtes dans l'eau bouillante salée.",
+                    "Faire revenir les lardons dans une poêle.",
+                    "Battre les œufs avec le parmesan.",
+                    "Égoutter les pâtes et les mélanger aux lardons.",
+                    "Hors du feu, ajouter le mélange œufs-parmesan.",
+                    "Mélanger rapidement et servir immédiatement."
+                ]
+            },
+            2: {
+                title: "Salade César",
+                time: "15 min",
+                servings: "2 personnes",
+                difficulty: "Facile",
+                ingredients: [
+                    "1 laitue romaine",
+                    "200g de poulet grillé",
+                    "50g de parmesan",
+                    "Croûtons",
+                    "Sauce César"
+                ],
+                instructions: [
+                    "Laver et couper la laitue.",
+                    "Couper le poulet en lamelles.",
+                    "Disposer la laitue dans un saladier.",
+                    "Ajouter le poulet et les croûtons.",
+                    "Arroser de sauce César.",
+                    "Ajouter des copeaux de parmesan et servir."
+                ]
+            },
+            3: {
+                title: "Tiramisu",
+                time: "30 min",
+                servings: "6 personnes",
+                difficulty: "Moyen",
+                ingredients: [
+                    "250g de mascarpone",
+                    "3 œufs",
+                    "100g de sucre",
+                    "200g de biscuits à la cuillère",
+                    "300ml de café fort",
+                    "Cacao en poudre"
+                ],
+                instructions: [
+                    "Séparer les blancs des jaunes d'œufs.",
+                    "Battre les jaunes avec le sucre jusqu'à blanchiment.",
+                    "Ajouter le mascarpone et mélanger.",
+                    "Monter les blancs en neige et les incorporer délicatement.",
+                    "Tremper les biscuits dans le café et les disposer dans un plat.",
+                    "Recouvrir de crème au mascarpone.",
+                    "Répéter l'opération et finir par une couche de crème.",
+                    "Saupoudrer de cacao et réfrigérer au moins 4 heures."
+                ]
+            },
+            4: {
+                title: "Burger Maison",
+                time: "25 min",
+                servings: "4 personnes",
+                difficulty: "Moyen",
+                ingredients: [
+                    "500g de viande hachée",
+                    "4 pains à burger",
+                    "Laitue, tomate, oignon",
+                    "Fromage (cheddar)",
+                    "Sauces au choix"
+                ],
+                instructions: [
+                    "Former 4 steaks avec la viande hachée.",
+                    "Cuire les steaks à la poêle ou au grill.",
+                    "Toaster légèrement les pains à burger.",
+                    "Monter les burgers avec les légumes, le fromage et les sauces.",
+                    "Servir chaud avec des frites."
+                ]
+            },
+            5: {
+                title: "Ratatouille",
+                time: "45 min",
+                servings: "4 personnes",
+                difficulty: "Difficile",
+                ingredients: [
+                    "2 aubergines",
+                    "2 courgettes",
+                    "1 poivron rouge",
+                    "1 poivron jaune",
+                    "4 tomates",
+                    "1 oignon",
+                    "2 gousses d'ail",
+                    "Herbes de Provence"
+                ],
+                instructions: [
+                    "Couper tous les légumes en dés.",
+                    "Faire revenir l'oignon et l'ail dans de l'huile d'olive.",
+                    "Ajouter les poivrons et cuire 5 minutes.",
+                    "Ajouter les courgettes et aubergines, cuire 10 minutes.",
+                    "Ajouter les tomates et les herbes, saler et poivrer.",
+                    "Couvrir et laisser mijoter 20 minutes.",
+                    "Servir chaud ou froid."
+                ]
+            },
+            6: {
+                title: "Cookies Chocolat",
+                time: "25 min",
+                servings: "12 pièces",
+                difficulty: "Facile",
+                ingredients: [
+                    "200g de farine",
+                    "100g de sucre",
+                    "100g de beurre",
+                    "1 œuf",
+                    "100g de pépites de chocolat",
+                    "1 cuillère à café de levure chimique"
+                ],
+                instructions: [
+                    "Préchauffer le four à 180°C.",
+                    "Mélanger le beurre fondu avec le sucre.",
+                    "Ajouter l'œuf et bien mélanger.",
+                    "Incorporer la farine et la levure.",
+                    "Ajouter les pépites de chocolat.",
+                    "Former des boules de pâte et les disposer sur une plaque.",
+                    "Cuire 10-12 minutes jusqu'à ce que les bords soient dorés.",
+                    "Laisser refroidir avant de déguster."
+                ]
+            }
+        };
+
+        function openRecipe(id) {
+            const recipe = recipes[id];
+            if (!recipe) return;
+
+            document.getElementById('modalTitle').textContent = recipe.title;
+            document.getElementById('modalTime').textContent = recipe.time;
+            document.getElementById('modalServings').textContent = recipe.servings;
+            document.getElementById('modalDifficulty').textContent = recipe.difficulty;
+
+            const ingredientsList = document.getElementById('modalIngredients');
+            ingredientsList.innerHTML = '';
+            recipe.ingredients.forEach(ing => {
+                const li = document.createElement('li');
+                li.textContent = ing;
+                ingredientsList.appendChild(li);
+            });
+
+            const instructionsList = document.getElementById('modalInstructions');
+            instructionsList.innerHTML = '';
+            recipe.instructions.forEach(inst => {
+                const li = document.createElement('li');
+                li.textContent = inst;
+                instructionsList.appendChild(li);
+            });
+
+            document.getElementById('recipeModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('recipeModal').style.display = 'none';
+        }
+
+        function searchRecipes() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            alert('Recherche pour : ' + searchTerm);
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('recipeModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+
+</html>
