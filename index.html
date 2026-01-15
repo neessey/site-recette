@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +23,7 @@
             background-color: #ff6b6b;
             color: white;
             padding: 1rem 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .container {
@@ -39,7 +40,7 @@
         nav {
             background-color: white;
             padding: 1rem 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .search-bar {
@@ -98,14 +99,14 @@
             background-color: white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
         }
 
         .recipe-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .recipe-image {
@@ -173,7 +174,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             overflow-y: auto;
         }
@@ -207,20 +208,24 @@
             padding: 30px;
         }
 
-        .ingredients, .instructions {
+        .ingredients,
+        .instructions {
             margin-bottom: 30px;
         }
 
-        .ingredients ul, .instructions ol {
+        .ingredients ul,
+        .instructions ol {
             margin-left: 20px;
             margin-top: 10px;
         }
 
-        .ingredients li, .instructions li {
+        .ingredients li,
+        .instructions li {
             margin-bottom: 8px;
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -263,7 +268,8 @@
             <div class="recipes-grid" id="recipesGrid">
                 <div class="recipe-card" onclick="openRecipe(1)">
                     <div class="recipe-image">
-                        <img src="pates.jpg" alt="Pâtes Carbonara" style="width:100%; height:100%; object-fit:cover; display:block;">
+                        <img src="pates.jpg" alt="Pâtes Carbonara"
+                            style="width:100%; height:100%; object-fit:cover; display:block;">
                     </div>
                     <div class="recipe-content">
                         <h3 class="recipe-title">Pâtes Carbonara</h3>
@@ -280,7 +286,7 @@
                     <div class="recipe-image">
                         <img src="salade.webp" alt="" style="width:100%; height:100%; object-fit:cover; display:block;"">
                     </div>
-                    <div class="recipe-content">
+                    <div class=" recipe-content">
                         <h3 class="recipe-title">Salade César</h3>
                         <div class="recipe-meta">
                             <span>⏱️ 15 min</span>
@@ -293,9 +299,10 @@
 
                 <div class="recipe-card" onclick="openRecipe(3)">
                     <div class="recipe-image">
-                        <img src="tiramisu.webp" alt="" style="width:100%; height:100%; object-fit:cover; display:block;"">
+                        <img src="tiramisu.webp" alt=""
+                            style="width:100%; height:100%; object-fit:cover; display:block;"">
                     </div>
-                    <div class="recipe-content">
+                    <div class=" recipe-content">
                         <h3 class="recipe-title">Tiramisu</h3>
                         <div class="recipe-meta">
                             <span>⏱️ 30 min</span>
@@ -310,10 +317,10 @@
                     <div class="recipe-image">
                         <img src="burger.webp" alt="" style="width:100%; height:100%; object-fit:cover; display:block;"">
                     </div>
-                    <div class="recipe-content">
+                    <div class=" recipe-content">
                         <h3 class="recipe-title">Burger Maison</h3>
                         <div class="recipe-meta">
-                            <span>⏱️ 25 min</span>
+                            <span>⏱️ 30 min</span>
                             <span>👥 4 pers.</span>
                         </div>
                         <p class="recipe-description">Burger juteux avec frites croustillantes.</p>
@@ -323,9 +330,10 @@
 
                 <div class="recipe-card" onclick="openRecipe(5)">
                     <div class="recipe-image">
-                        <img src="ratatouille.jpeg" alt="" style="width:100%; height:100%; object-fit:cover; display:block;"">
+                        <img src="ratatouille.jpeg" alt=""
+                            style="width:100%; height:100%; object-fit:cover; display:block;"">
                     </div>
-                    <div class="recipe-content">
+                    <div class=" recipe-content">
                         <h3 class="recipe-title">Ratatouille</h3>
                         <div class="recipe-meta">
                             <span>⏱️ 45 min</span>
@@ -340,7 +348,7 @@
                     <div class="recipe-image">
                         <img src="cookies.webp" alt="" style="width:100%; height:100%; object-fit:cover; display:block;"">
                     </div>
-                    <div class="recipe-content">
+                    <div class=" recipe-content">
                         <h3 class="recipe-title">Cookies Chocolat</h3>
                         <div class="recipe-meta">
                             <span>⏱️ 25 min</span>
@@ -427,6 +435,99 @@
                     "Arroser de sauce César.",
                     "Ajouter des copeaux de parmesan et servir."
                 ]
+            },
+            3: {
+                title: "Tiramisu",
+                time: "30 min",
+                servings: "6 personnes",
+                difficulty: "Moyen",
+                ingredients: [
+                    "250g de mascarpone",
+                    "3 œufs",
+                    "100g de sucre",
+                    "200g de biscuits à la cuillère",
+                    "300ml de café fort",
+                    "Cacao en poudre"
+                ],
+                instructions: [
+                    "Séparer les blancs des jaunes d'œufs.",
+                    "Battre les jaunes avec le sucre jusqu'à blanchiment.",
+                    "Ajouter le mascarpone et mélanger.",
+                    "Monter les blancs en neige et les incorporer délicatement.",
+                    "Tremper les biscuits dans le café et les disposer dans un plat.",
+                    "Recouvrir de crème au mascarpone.",
+                    "Répéter l'opération et finir par une couche de crème.",
+                    "Saupoudrer de cacao et réfrigérer au moins 4 heures."
+                ]
+            },
+            4: {
+                title: "Burger Maison",
+                time: "30 min",
+                servings: "4 personnes",
+                difficulty: "Moyen",
+                ingredients: [
+                    "500g de viande hachée",
+                    "4 pains à burger",
+                    "Laitue, tomate, oignon",
+                    "Fromage (cheddar)",
+                    "Sauces au choix"
+                ],
+                instructions: [
+                    "Former 4 steaks avec la viande hachée.",
+                    "Cuire les steaks à la poêle ou au grill.",
+                    "Toaster légèrement les pains à burger.",
+                    "Monter les burgers avec les légumes, le fromage et les sauces.",
+                    "Servir chaud avec des frites."
+                ]
+            },
+            5: {
+                title: "Ratatouille",
+                time: "45 min",
+                servings: "4 personnes",
+                difficulty: "Difficile",
+                ingredients: [
+                    "2 aubergines",
+                    "2 courgettes",
+                    "1 poivron rouge",
+                    "1 poivron jaune",
+                    "4 tomates",
+                    "1 oignon",
+                    "2 gousses d'ail",
+                    "Herbes de Provence"
+                ],
+                instructions: [
+                    "Couper tous les légumes en dés.",
+                    "Faire revenir l'oignon et l'ail dans de l'huile d'olive.",
+                    "Ajouter les poivrons et cuire 5 minutes.",
+                    "Ajouter les courgettes et aubergines, cuire 10 minutes.",
+                    "Ajouter les tomates et les herbes, saler et poivrer.",
+                    "Couvrir et laisser mijoter 20 minutes.",
+                    "Servir chaud ou froid."
+                ]
+            },
+            6: {
+                title: "Cookies Chocolat",
+                time: "25 min",
+                servings: "12 pièces",
+                difficulty: "Facile",
+                ingredients: [
+                    "200g de farine",
+                    "100g de sucre",
+                    "100g de beurre",
+                    "1 œuf",
+                    "100g de pépites de chocolat",
+                    "1 cuillère à café de levure chimique"
+                ],
+                instructions: [
+                    "Préchauffer le four à 180°C.",
+                    "Mélanger le beurre fondu avec le sucre.",
+                    "Ajouter l'œuf et bien mélanger.",
+                    "Incorporer la farine et la levure.",
+                    "Ajouter les pépites de chocolat.",
+                    "Former des boules de pâte et les disposer sur une plaque.",
+                    "Cuire 10-12 minutes jusqu'à ce que les bords soient dorés.",
+                    "Laisser refroidir avant de déguster."
+                ]
             }
         };
 
@@ -467,7 +568,7 @@
             alert('Recherche pour : ' + searchTerm);
         }
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modal = document.getElementById('recipeModal');
             if (event.target === modal) {
                 closeModal();
@@ -475,4 +576,5 @@
         }
     </script>
 </body>
+
 </html>
